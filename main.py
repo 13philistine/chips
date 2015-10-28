@@ -1,4 +1,10 @@
-# coding: cp866
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Oct 11 20:51:38 2015
+
+@author: Simon94
+"""
+
 import random
 
 
@@ -9,13 +15,67 @@ b_a = 0
 b_y = 0
 f = 6
 
-y = ["1", "2", "3", "4", "5", "6"]
-a = ["1", "2", "3", "4", "5", "6"]
+
+
+class ai():
+    
+    def __init__(self,a):
+        self.a = a
+        
+    
+    def ai_sel(self):
+        v = 0
+        while (1 > v) or (v > 6):  # choose
+            v = int(random.randint(1,6))
+        i = v - 1
+        # add X
+        while self.a[i] == "X":
+            v = 0
+            while (1 > v) or (v > 6):
+                v = int(random.randint(1,6))
+            i = v - 1
+        self.a[i] = "X"
+        global s_buf
+        s_buf += v
+        print("AI: ", v)
+        global b_a
+        b_a = v
+        
+
+class player():
+    
+    def __init__(self,y):
+        self.y = y    
+        
+    def sel(self):
+        v = 0
+        while (1 > v) or (v > 6):  #
+            print("Choose chips: ")
+            v = int(input())
+        v -= 1
+        i = v
+    
+        while self.y[i] == "X":
+            print("Chips used")
+            v = -1
+            while (0 > v) or (v > 5):
+                print("Choose chips: ")
+                v = int(input())
+                v -= 1
+                i = v
+        self.y[i] = "X"
+        global s_buf
+        s_buf = v + 1
+        global b_y
+        b_y = v + 1
+
+        
+    
 
 print("CHIPS")
 
 
-def out():
+def out(a,y):
     print("\n=====================================")
     print("   YOU   |", y[0], "|", y[1], "|", y[2], "|", y[3], "|", y[4], "|", y[5], "|")
     print("   AI    |", a[0], "|", a[1], "|", a[2], "|", a[3], "|", a[4], "|", a[5], "|")
@@ -23,49 +83,10 @@ def out():
     print("=====================================")
 
 
-def sel():
-    v = 0
-    while (1 > v) or (v > 6):  #
-        print("Choose chips: ")
-        v = int(input())
-    v -= 1
-    i = v
-
-    while y[i] == "X":
-        print("Chips used")
-        v = -1
-        while (0 > v) or (v > 5):
-            print("Choose chips: ")
-            v = int(input())
-            v -= 1
-            i = v
-    y[i] = "X"
-    global s_buf
-    s_buf = v + 1
-    global b_y
-    b_y = v + 1
 
 
-def ai_sel():
-    v = 0
-    while (1 > v) or (v > 6):  # choose
-        v = int(random.randint(1,6))
-    i = v - 1
-    # add X
-    while a[i] == "X":
-        v = 0
-        while (1 > v) or (v > 6):
-            v = int(random.randint(1,6))
-        i = v - 1
-    a[i] = "X"
-    global s_buf
-    s_buf += v
-    print("AI: ", v)
-    global b_a
-    b_a = v
 
-
-def ito():
+def ito(a,y):
     if b_a > b_y:
         global s_ai
         s_ai += s_buf
@@ -91,13 +112,18 @@ def win():
 
 
 def game():
+    y = ["1", "2", "3", "4", "5", "6"]
+    global a    
+    a = ["1", "2", "3", "4", "5", "6"]
+    AI = ai(a)
+    Player = player(y)
     while f != 0:
-        out()
-        sel()
-        ai_sel()
-        ito()
+        out(a,y)
+        Player.sel()
+        AI.ai_sel()
+        ito(a,y)
 
-    out()
+    out(a,y)
     win()
     print("===  GAME OVER   ===")
 
